@@ -1,171 +1,170 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { Modal } from "react-bootstrap";
 import { courseActions, userActions } from '../_actions';
 import { CourseYearTypeCodes } from '../_constants';
-class AddModule extends React.Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            module: {
-                Module_Id: 0,
-                Course_Id: 0,
-                Module_Name: '',
-                Teacher_Id: 0,
-                Course_Year_Id: 0,
-            },
-            submitted: false,
-            isPostGraduate: true,
+const AddModule = (props) => {
 
-        };
+    const {
+        getAllUsersByRole,
+        getAllCourses,
+        courses,
+        addModule,
+        tutors,
+        show,
+        handleClose
+    } = props;
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    const [Course_Id, setCourse_Id] = useState('');
+    const [Module_Name, setModule_Name] = useState('');
+    const [Teacher_Id, setTeacher_Id] = useState('');
+    const [Course_Year_Id, setCourse_Year_Id] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+    const [isPostGraduate, setisPostGraduate] = useState(false);
 
-    componentDidMount() {
-        this.props.getAllUsersByRole(4);
-        this.props.getAllCourses();
-    }
+    useEffect(() => {
+        getAllUsersByRole();
+        getAllCourses();
+    }, [])
 
-    handleChange(e) {
+    const handleChange = (e) => {
 
         const { name, value } = e.target;
         if (name === "Course_Id") {
-            this.props.courses.forEach(course => {
+            courses.forEach(course => {
                 if (course.Course_Id == value) {
                     if (course.Course_Type_Code_Id !== 2) {
-                        this.setState({ isPostGraduate: false });
+                        setisPostGraduate(false);
                     }
                     else {
-                        this.setState({ isPostGraduate: true });
+                        setisPostGraduate(true);
                     }
                 }
             });
-
-        }
-        var { module } = this.state;
-        module[name] = value;
-        this.setState({ module });
+            setCourse_Id(value);
+        } else if (name === 'Module_Name') setModule_Name(value);
+        else if (name === 'Teacher_Id') setTeacher_Id(value);
+        else if (name === 'Course_Year_Id') setCourse_Year_Id(value);
     }
 
-    handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        this.setState({ submitted: true });
+        setSubmitted(true);
 
-        const { module } = this.state;
-        if (module.Module_Name && module.Course_Id && module.Teacher_Id && module.Course_Year_Id) {
-
-            this.props.addModule(module);
+        if (Module_Name && Course_Id && Teacher_Id && Course_Year_Id) {
+            const data = {
+                Module_Name,
+                Course_Id,
+                Teacher_Id,
+                Course_Year_Id
+            }
+            await addModule(data);
+            handleClose();
         }
     }
 
-    render() {
-        const { module, submitted } = this.state;
-        const { courses, tutors } = this.props;
-        return (
-            <div className="row child-component-container">
-                <h3 className="child-component-header">Add Module</h3>
-                <div className="col-md-6">
-                    <form name="form" onSubmit={this.handleSubmit}>
-                        <div className={'form-group' + (submitted && !module.Module_Name ? ' has-error' : '')}>
-                            <label htmlFor="Module_Name">Module Name</label>
-                            <input type="text" className="form-control" name="Module_Name" value={this.state.module.Module_Name} onChange={this.handleChange} />
-                            {submitted && !module.Module_Name &&
-                                <div className="help-block">Module Name is required</div>
+    return (
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <form name="form" onSubmit={handleSubmit}>
+                    <div className={'form-group' + (submitted && !Module_Name ? ' has-error' : '')}>
+                        <label htmlFor="Module_Name">Module Name</label>
+                        <input type="text" className="form-control" name="Module_Name" value={Module_Name} onChange={handleChange} />
+                        {submitted && !Module_Name &&
+                            <div className="help-block">Module Name is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !Course_Id ? ' has-error' : '')}>
+                        <label htmlFor="Course_Id">Course</label>
+                        <select className="form-control" name="Course_Id" value={Course_Id} onChange={handleChange}>
+
+                            <option value="0">
+                                Select
+                            </option>
+
+
+                            {courses?.map((option, index) => {
+
+                                    return (
+
+                                        <option value={option.Course_Id} key={index}>
+                                            {option.Course_Name}
+                                        </option>
+
+                                    )
+                                })
+
                             }
-                        </div>
-                        <div className={'form-group' + (submitted && !module.Course_Id ? ' has-error' : '')}>
-                            <label htmlFor="Course_Id">Course</label>
-                            <select className="form-control" name="Course_Id" value={this.state.module.Course_Id} onChange={this.handleChange}>
+                        </select>
+                        {submitted && !Course_Id &&
+                            <div className="help-block">Course is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !Teacher_Id ? ' has-error' : '')}>
+                        <label htmlFor="Teacher_Id">Tutor</label>
+                        <select className="form-control" name="Teacher_Id" value={Teacher_Id} onChange={handleChange}>
 
-                                <option value="0">
-                                    Select
-                             </option>
+                            <option value="0">
+                                Select
+                            </option>
 
 
-                                {
-                                    courses && courses.map((option, index) => {
+                            {tutors?.map((option, index) => {
 
-                                        return (
+                                    return (
 
-                                            <option value={option.Course_Id} key={index}>
-                                                {option.Course_Name}
-                                            </option>
+                                        <option value={option.User_Id} key={index}>
+                                            {option.First_Name} {option.Last_Name}
+                                        </option>
 
-                                        )
-                                    })
+                                    )
+                                })
 
-                                }
-                            </select>
-                            {submitted && !module.Course_Id &&
-                                <div className="help-block">Course is required</div>
                             }
-                        </div>
-                        <div className={'form-group' + (submitted && !module.Teacher_Id ? ' has-error' : '')}>
-                            <label htmlFor="Teacher_Id">Tutor</label>
-                            <select className="form-control" name="Teacher_Id" value={this.state.module.Teacher_Id} onChange={this.handleChange}>
+                        </select>
+                        {submitted && !Teacher_Id &&
+                            <div className="help-block">Tutor is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !Course_Year_Id ? ' has-error' : '')}>
+                        <label htmlFor="Course_Year_Id">Course Year</label>
+                        <select className="form-control" name="Course_Year_Id" value={Course_Year_Id} onChange={handleChange}>
 
-                                <option value="0">
-                                    Select
-                             </option>
+                            <option value="0">
+                                Select
+                            </option>
 
 
-                                {
-                                    tutors && tutors.map((option, index) => {
+                            {CourseYearTypeCodes?.filter(x => ((isPostGraduate && (x.id === 1)) || !isPostGraduate)).map((option, index) => {
 
-                                        return (
+                                    return (
 
-                                            <option value={option.User_Id} key={index}>
-                                                {option.First_Name} {option.Last_Name}
-                                            </option>
+                                        <option value={option.id} key={index}>
+                                            {option.value}
+                                        </option>
 
-                                        )
-                                    })
+                                    )
+                                })
 
-                                }
-                            </select>
-                            {submitted && !module.Teacher_Id &&
-                                <div className="help-block">Tutor is required</div>
                             }
-                        </div>
-                        <div className={'form-group' + (submitted && !module.Course_Year_Id ? ' has-error' : '')}>
-                            <label htmlFor="Course_Year_Id">Course Year</label>
-                            <select className="form-control" name="Course_Year_Id" value={this.state.module.Course_Year_Id} onChange={this.handleChange}>
+                        </select>
+                        {submitted && !Course_Year_Id &&
+                            <div className="help-block">Course Year is required</div>
+                        }
+                    </div>
 
-                                <option value="0">
-                                    Select
-                             </option>
+                    <div className="form-group">
+                        <button className="btn btn-info">Submit</button>
+                    </div>
+                </form>
+            </Modal.Body>
+        </Modal>
+    );
 
-
-                                {
-                                    CourseYearTypeCodes && CourseYearTypeCodes.filter(x => ((this.state.isPostGraduate && (x.id == 1)) || !this.state.isPostGraduate)).map((option, index) => {
-
-                                        return (
-
-                                            <option value={option.id} key={index}>
-                                                {option.value}
-                                            </option>
-
-                                        )
-                                    })
-
-                                }
-                            </select>
-                            {submitted && !module.Course_Year_Id &&
-                                <div className="help-block">Course Year is required</div>
-                            }
-                        </div>
-
-                        <div className="form-group">
-                            <button className="btn btn-info">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        );
-    }
 }
 
 function mapState(state) {

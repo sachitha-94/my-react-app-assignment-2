@@ -37,21 +37,21 @@ const menuItems = [
         component: Bookmark,
 
     },
-    {
-        id: 3,
-        name: 'Add Course',
-        path: '/Department/Add_Course',
-        role: 2
+    // {
+    //     id: 3,
+    //     name: 'Add Course',
+    //     path: '/Department/Add_Course',
+    //     role: 2
 
-    },
-    {
-        id: 4,
-        name: "Add Module",
-        path: '/Department/Add_Module',
-        role: 2,
-        component: Bookmark,
+    // },
+    // {
+    //     id: 4,
+    //     name: "Add Module",
+    //     path: '/Department/Add_Module',
+    //     role: 2,
+    //     component: Bookmark,
 
-    },
+    // },
     {
         id: 5,
         name: "Enroll",
@@ -137,7 +137,7 @@ class Side extends React.Component {
             <>
                 <ListGroup className="menu-items">
                     {
-                        menuItems.filter(x => x.role === user_role).map((menu, index) => {
+                        menuItems?.map((menu, index) => {
                             return (
 
                                 <ListGroup.Item className="menu-item-custom" key={index} variant={this.getVariant(index)} action>
