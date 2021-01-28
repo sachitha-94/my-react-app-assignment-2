@@ -60,7 +60,7 @@ function editCourse(course) {
 
     var promise = new Promise(function(resolve, reject) {
 
-        axios.post(`${config.apiUrl}/edit-course`, course, {
+        axios.post(`${config.apiUrl}/department/edit-course`, course, {
                 headers: headers
             })
             .then(response => {
@@ -143,20 +143,20 @@ function getDepartmentAdmins() {
     return promise;
 }
 
-//university/get-courses-admins
+//department/delete-course
 
-function _delete(id) {
+function _delete(Course_Id) {
     var headers = {
         'Content-Type': 'application/json'
     };
 
     var data = {
-        id,
+        Course_Id,
     }
 
     var promise = new Promise(function(resolve, reject) {
 
-        axios.post(`${config.apiUrl}/delete-course`, data, {
+        axios.post(`${config.apiUrl}/department/delete-course`, data, {
                 headers: headers
             })
             .then(response => {

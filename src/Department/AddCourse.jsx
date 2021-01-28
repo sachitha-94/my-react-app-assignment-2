@@ -1,105 +1,100 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { Modal } from "react-bootstrap";
 import { courseActions } from '../_actions';
 import { CourseTypeCodes } from '../_constants';
-class AddCourse extends React.Component {
-    constructor(props) {
-        super(props);
+const AddCourse = (props) => {
 
-        this.state = {
-            course: {
-                Course_Id: 0,
-                Course_Name: '',
-                Pre_Course_Req: '',
-            },
-            courses: [],
-            submitted: false,
+    const { show, handleClose, addCourse } = props;
 
-        };
+    const [Course_Name, setCourse_Name] = useState('');
+    const [Course_Type_Code_Id, setCourse_Type_Code_Id] = useState('');
+    const [Pre_Course_Req, setPre_Course_Req] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
-    componentDidMount() {
-
-    }
-
-    handleChange(e) {
+    const handleChange = (e) => {
 
         const { name, value } = e.target;
-        var { course } = this.state;
-        course[name] = value;
-        this.setState({ course });
+
+        if (name === 'Course_Name') setCourse_Name(value);
+        else if (name === 'Course_Type_Code_Id') setCourse_Type_Code_Id(value);
+        else if (name === 'Pre_Course_Req') setPre_Course_Req(value);
     }
 
-    handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        this.setState({ submitted: true });
-        const { course } = this.state;
-        if (course.Course_Name && course.Course_Type_Code_Id) {
+        setSubmitted(true);
 
-            this.props.addCourse(this.state.course);
+        if (Course_Name && Course_Type_Code_Id && Pre_Course_Req) {
+            const data = {
+                Course_Name,
+                Course_Type_Code_Id,
+                Pre_Course_Req
+
+            }
+
+            addCourse(data);
+            handleClose();
         }
     }
 
-    render() {
-        const { course, submitted } = this.state;
-        return (
-            <div className="row child-component-container">
-                <h3 className="child-component-header">Add Course</h3>
-                <div className="col-md-6">
-                    <form name="form" onSubmit={this.handleSubmit}>
-                        <div className={'form-group' + (submitted && !course.Course_Name ? ' has-error' : '')}>
-                            <label htmlFor="Course_Name">Course Name</label>
-                            <input type="text" className="form-control" name="Course_Name" value={course.Course_Name} onChange={this.handleChange} />
-                            {submitted && !course.Course_Name &&
-                                <div className="help-block">Course Name is required</div>
+    return (
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Department</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <form name="form" onSubmit={handleSubmit}>
+                    <div className={'form-group' + (submitted && !Course_Name ? ' has-error' : '')}>
+                        <label htmlFor="Course_Name">Course Name</label>
+                        <input type="text" className="form-control" name="Course_Name" value={Course_Name} onChange={handleChange} />
+                        {submitted && !Course_Name &&
+                            <div className="help-block">Course Name is required</div>
+                        }
+                    </div>
+                    <div className={'form-group'}>
+                        <label htmlFor="Pre_Course_Req">Course Pre Requesites</label>
+                        <input type="textarea" className="form-control" name="Pre_Course_Req" value={Pre_Course_Req} onChange={handleChange} />
+                    </div>
+
+                    <div className={'form-group' + (submitted && !Course_Type_Code_Id ? ' has-error' : '')}>
+                        <label htmlFor="Course_Type_Code_Id">Course Type</label>
+                        <select className="form-control" name="Course_Type_Code_Id" value={Course_Type_Code_Id} onChange={handleChange}>
+
+                            <option value="0">
+                                Select
+                            </option>
+
+
+                            {CourseTypeCodes?.map((option, index) => {
+
+                                    return (
+
+                                        <option value={option.id} key={index}>
+                                            {option.value}
+                                        </option>
+
+                                    )
+                                })
+
                             }
-                        </div>
-                        <div className={'form-group'}>
-                            <label htmlFor="Pre_Course_Req">Course Pre Requesites</label>
-                            <input type="textarea" className="form-control" name="Pre_Course_Req" value={course.Pre_Course_Req} onChange={this.handleChange} />
-                        </div>
+                        </select>
+                        {submitted && !Course_Type_Code_Id &&
+                            <div className="help-block">Course Type is required</div>
+                        }
+                    </div>
 
-                        <div className={'form-group' + (submitted && !course.Course_Type_Code_Id ? ' has-error' : '')}>
-                            <label htmlFor="Course_Type_Code_Id">Course Type</label>
-                            <select className="form-control" name="Course_Type_Code_Id" value={course.Course_Type_Code_Id} onChange={this.handleChange}>
+                    <div className="form-group">
+                        <button className="btn btn-info">Submit</button>
+                    </div>
+                </form>
+            </Modal.Body>
+        </Modal>
 
-                                <option value="0">
-                                    Select
-                             </option>
+    );
 
-
-                                {
-                                    CourseTypeCodes && CourseTypeCodes.map((option, index) => {
-
-                                        return (
-
-                                            <option value={option.id} key={index}>
-                                                {option.value}
-                                            </option>
-
-                                        )
-                                    })
-
-                                }
-                            </select>
-                            {submitted && !course.Course_Type_Code_Id &&
-                                <div className="help-block">Course Type is required</div>
-                            }
-                        </div>
-
-                        <div className="form-group">
-                            <button className="btn btn-info">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        );
-    }
 }
 
 function mapState(state) {
@@ -113,4 +108,4 @@ const actionCreators = {
 };
 
 const connectedAddCoursePage = connect(mapState, actionCreators)(AddCourse);
-export { connectedAddCoursePage as AddCourse };
+export { connectedAddCoursePage as AddCourseModal };

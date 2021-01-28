@@ -1,84 +1,114 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { courseActions } from '../_actions';
 import { Table, Button } from 'react-bootstrap';
+import { AddCourseModal, UpdateModal } from './';
+import { DeleteModal } from '../Common/DeleteModal';
 
-class Courses extends React.Component {
-    constructor(props) {
-        super(props);
+const Courses = (props) => {
 
-        this.state = {
+    const { getAllCourses, courses, deleteCourse } = props
 
-            courses: [],
 
-        };
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    useEffect(() => {
+        getAllCourses();
+    }, [])
+
+
+    useEffect(() => {
+        if (!isAdding || !isUpdating || !isDeleting)
+            getAllCourses();
+    }, [isDeleting, isUpdating, isAdding])
+
+
+
+    const deleteButtonOnClick = (data) => {
+        setIsDeleting(true);
+        setSelectedCourse(data)
+    }
+    const handleCloseDeleteModal = () => {
+
+        setIsDeleting(false);
+        setSelectedCourse(null);
+    }
+    const handleDelete = () => {
+        deleteCourse(selectedCourse?.Course_Id);
+        handleCloseDeleteModal();
     }
 
-    componentDidMount() {
-        this.props.getAllCourses();
+    const editButtonOnClick = (data) => {
+        setIsUpdating(true);
+        setSelectedCourse(data)
     }
 
-    handleChange(e) {
+    const handleCloseUpdatModal = () => {
 
-        const { name, value } = e.target;
-        var course = this.state;
-        course[name] = value;
-        this.setState({ course });
+        setIsUpdating(false);
+        setSelectedCourse(null);
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { course } = this.state;
-        if (course.Course_Name && course.Course_Admin_Id) {
-
-            this.props.addCourse(this.state.course);
-        }
-    }
-
-    render() {
-        return (
-            <div className="row child-component-container">
-                <h3 className="child-component-header">Courses</h3>
-                <div className="row" style={{
-                    padding: 30
-                }}>
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Pre Requesites</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.props.courses && this.props.courses.map((course, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{course.Course_Name}</td>
-                                            <td>{course.Pre_Course_Req}</td>
-                                            <td>
-                                                <Button variant="success">Edit</Button>{' '}
-                                                <Button variant="danger">Delete</Button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-
-                            }
-
-                        </tbody>
-                    </Table>
-                </div>
+    return (
+        <div className="row child-component-container">
+            <h3 className="child-component-header">Courses</h3>
+            <div className="row" style={{
+                textAlign: 'right',
+                paddingLeft: 30
+            }}>
+                <Button variant="primary" onClick={() => setIsAdding(true)}>Add Course</Button>{' '}
             </div>
+            <div className="row" style={{
+                padding: 30
+            }}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Pre Requesites</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {courses?.map((course, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{course.Course_Name}</td>
+                                        <td>{course.Pre_Course_Req}</td>
+                                        <td>
+                                            <Button variant="success" onClick={() => editButtonOnClick(course)}>Edit</Button>{' '}
+                                            <Button variant="danger" onClick={() => deleteButtonOnClick(course)}>Delete</Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
 
-        );
-    }
+                        }
+
+                    </tbody>
+                </Table>
+            </div>
+            {isAdding && <AddCourseModal
+                show={isAdding}
+                handleClose={() => setIsAdding(false)}
+            />}
+            {isDeleting && <DeleteModal
+                show={isDeleting}
+                handleClose={handleCloseDeleteModal}
+                handleDelete={handleDelete}
+                title='Confirm Delete Course'
+                body={`Do you want to Remove ${selectedCourse?.Course_Name} Course?`}
+            />}
+            {isUpdating && <UpdateModal
+                show={isUpdating}
+                handleClose={handleCloseUpdatModal}
+                selectedCourse={selectedCourse} />}
+        </div>
+
+    );
 }
 
 function mapState(state) {

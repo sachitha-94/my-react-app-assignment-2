@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { departmentActions } from '../_actions';
 
@@ -101,14 +100,6 @@ const AddDepartment = (props) => {
                     </div>
                 </form>
             </Modal.Body>
-            {/* <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-          </Button>
-                <Button variant="primary" onClick={handleDelete}>
-                    Save
-          </Button>
-            </Modal.Footer> */}
         </Modal>
     );
 }

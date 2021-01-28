@@ -46,9 +46,9 @@ const HomePage = (props) => {
                                 <Route exact path="/Department/Courses">
                                     <Courses />
                                 </Route>
-                                <Route exact path="/Department/Add_Course">
+                                {/* <Route exact path="/Department/Add_Course">
                                     <AddCourse />
-                                </Route>
+                                </Route> */}
                                 <Route exact path="/Department/Add_Module">
                                     <AddModule />
                                 </Route>
