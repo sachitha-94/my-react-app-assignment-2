@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from "react-bootstrap";
-import { courseActions } from '../_actions';
+import { courseActions, departmentActions } from '../_actions';
 import { CourseTypeCodes } from '../_constants';
 
 const UpdateModal = (props) => {
@@ -9,15 +9,20 @@ const UpdateModal = (props) => {
     const [Course_Name, setCourse_Name] = useState('');
     const [Course_Type_Code_Id, setCourse_Type_Code_Id] = useState('');
     const [Pre_Course_Req, setPre_Course_Req] = useState('');
+    const [Department_Id, setDepartment_Id] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
     const { handleClose,
         show,
         selectedCourse,
-        editCourse } = props;
+        editCourse,
+        departments,
+        getAllDepartments
+    } = props;
 
     useEffect(() => {
 
+        getAllDepartments()
         if (selectedCourse) {
             setCourse_Name(selectedCourse?.Course_Name);
             setCourse_Type_Code_Id(selectedCourse?.Course_Type_Code_Id);
@@ -37,6 +42,7 @@ const UpdateModal = (props) => {
         if (name === 'Course_Name') setCourse_Name(value);
         else if (name === 'Course_Type_Code_Id') setCourse_Type_Code_Id(value);
         else if (name === 'Pre_Course_Req') setPre_Course_Req(value);
+        else if (name === 'Department_Id') setDepartment_Id(value);
     }
 
     const handleSubmit = async (e) => {
@@ -49,8 +55,8 @@ const UpdateModal = (props) => {
                 Course_Name,
                 Course_Type_Code_Id,
                 Pre_Course_Req,
-                Course_Id: selectedCourse?.Course_Id
-
+                Course_Id: selectedCourse?.Course_Id,
+                Department_Id
             }
 
             await editCourse(data);
@@ -109,6 +115,32 @@ const UpdateModal = (props) => {
                             <div className="help-block">Course Type is required</div>
                         }
                     </div>
+                    <div className={'form-group' + (submitted && !Department_Id ? ' has-error' : '')}>
+                        <label htmlFor="Course_Type_Code_Id">Department</label>
+                        <select className="form-control" name="Department_Id" value={Department_Id} onChange={handleChange}>
+
+                            <option value="0">
+                                Select
+                            </option>
+
+
+                            {departments?.map((option, index) => {
+
+                                return (
+
+                                    <option value={option.Department_Id} key={index}>
+                                        {option.Department_Name}
+                                    </option>
+
+                                )
+                            })
+
+                            }
+                        </select>
+                        {submitted && !Department_Id &&
+                            <div className="help-block">Department Id is required</div>
+                        }
+                    </div>
 
                     <div className="form-group">
                         <button className="btn btn-info">Submit</button>
@@ -122,6 +154,7 @@ const UpdateModal = (props) => {
 
 function mapState(state) {
     return {
+        departments: state.departmentsReducer.departments,
         // addEditDepartmentLoading: state.departmentsReducer.loading ? true : false,
         // department: state.departmentsReducer.departments,
 
@@ -130,7 +163,9 @@ function mapState(state) {
 
 const actionCreators = {
     editCourse: courseActions.editCourse,
+    getAllDepartments: departmentActions.getAllDepartments,
 };
+
 
 const connectedUpdateModal = connect(mapState, actionCreators)(UpdateModal);
 export { connectedUpdateModal as UpdateModal };

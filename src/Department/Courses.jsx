@@ -68,7 +68,9 @@ const Courses = (props) => {
                     <thead>
                         <tr>
                             <th>Course Name</th>
-                            <th>Pre Requesites</th>
+                            <th>Department</th>
+                            <th>Type</th>
+                            <th>Pre Requesites</th> 
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -77,6 +79,8 @@ const Courses = (props) => {
                                 return (
                                     <tr key={index}>
                                         <td>{course.Course_Name}</td>
+                                        <td>{course.Department_Id || ''}</td>
+                                        <td>{course.Course_Type}</td>
                                         <td>{course.Pre_Course_Req}</td>
                                         <td>
                                             <Button variant="success" onClick={() => editButtonOnClick(course)}>Edit</Button>{' '}
