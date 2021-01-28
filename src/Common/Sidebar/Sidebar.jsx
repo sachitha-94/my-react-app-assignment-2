@@ -13,14 +13,14 @@ const menuItems = [
         component: Bookmark,
 
     },
-    {
-        id: 2,
-        name: 'Add Departments',
-        path: '/university/add_department',
-        role: 1,
-        component: Bookmark,
+    // {
+    //     id: 2,
+    //     name: 'Add Departments',
+    //     path: '/university/add_department',
+    //     role: 1,
+    //     component: Bookmark,
 
-    },
+    // },
     {
         id: 3,
         name: 'Courses',

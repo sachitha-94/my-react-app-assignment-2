@@ -56,7 +56,7 @@ function editDepartment(department) {
 
     var promise = new Promise(function(resolve, reject) {
 
-        axios.post(`${config.apiUrl}/edit-department`, department, {
+        axios.post(`${config.apiUrl}/university/edit-department`, department, {
                 headers: headers
             })
             .then(response => {
@@ -141,18 +141,18 @@ function getDepartmentAdmins() {
 
 //university/get-departments-admins
 
-function _delete(id) {
+function _delete(Department_Id) {
     var headers = {
         'Content-Type': 'application/json'
     };
 
     var data = {
-        id,
+        Department_Id,
     }
 
     var promise = new Promise(function(resolve, reject) {
 
-        axios.post(`${config.apiUrl}/delete-department`, data, {
+        axios.post(`${config.apiUrl}/university/delete-department`, data, {
                 headers: headers
             })
             .then(response => {

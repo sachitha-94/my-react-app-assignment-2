@@ -25,7 +25,7 @@ const App = (props) => {
 
             <Router history={history}>
                 {alert.message &&
-                    <Alert className="alert-box" variant={alert.type == "alert-danger" ? 'danger' : 'success'} dismissible onClose={() => this.props.clearAlerts()}>
+                    <Alert className="alert-box" variant={alert.type == "alert-danger" ? 'danger' : 'success'} dismissible onClose={() => clearAlerts()}>
                         <Alert.Heading>{alert.type == "alert-danger" ? 'Error' : 'Success'}!  {alert.message}</Alert.Heading>
                     </Alert>
                 }

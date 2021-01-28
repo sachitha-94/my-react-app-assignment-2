@@ -45,7 +45,7 @@ function editDepartment(department) {
             .then(
                 department => {
                     dispatch(loaderActions.LoadingEnd());
-                    dispatch(alertActions.success('Registration successful'));
+                    dispatch(alertActions.success('successfully updated'));
                     dispatch(success());
 
                 },

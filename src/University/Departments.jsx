@@ -1,85 +1,112 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { departmentActions } from '../_actions';
 import { Table, Button } from 'react-bootstrap';
+import { departmentActions } from '../_actions';
+import { DeleteModal } from '../Common/DeleteModal';
+import { AddDepartmentModal, UpdateModal } from './';
 
-class Departments extends React.Component {
-    constructor(props) {
-        super(props);
+const Departments = (props) => {
+    const { getAllDepartments, departments, deleteDepartment } = props
 
-        this.state = {
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-            departments: [],
+    useEffect(() => {
+        getAllDepartments();
+    }, [])
 
-        };
+    useEffect(() => {
+        if (!isAdding || !isUpdating || !isDeleting)
+            getAllDepartments();
+    }, [isDeleting, isUpdating, isAdding])
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+
+
+    const deleteButtonOnClick = (data) => {
+        setIsDeleting(true);
+        setSelectedDepartment(data)
+    }
+    const handleCloseDeleteModal = () => {
+
+        setIsDeleting(false);
+        setSelectedDepartment(null);
+    }
+    const handleDeleteDepartment = () => {
+        deleteDepartment(selectedDepartment?.Department_Id);
+        handleCloseDeleteModal();
     }
 
-    componentDidMount() {
-        this.props.getAllDepartments();
+    const editButtonOnClick = (data) => {
+        setIsUpdating(true);
+        setSelectedDepartment(data)
     }
 
-    handleChange(e) {
+    const handleCloseUpdatModal = () => {
 
-        const { name, value } = e.target;
-        var department = this.state;
-        department[name] = value;
-        this.setState({ department });
+        setIsUpdating(false);
+        setSelectedDepartment(null);
     }
-
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { department } = this.state;
-        if (department.Department_Name && department.Department_Admin_Id) {
-
-            this.props.addDepartment(this.state.department);
-        }
-    }
-
-    render() {
-        return (
-            <div className="row child-component-container">
-                <h3 className="child-component-header">Departments</h3>
+    return (
+        <>
+        <div className="row child-component-container">
+            <h3 className="child-component-header">Departments</h3>
                 <div className="row" style={{
-                    padding: 30
+                    textAlign: 'right',
+                    paddingLeft: 45
                 }}>
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                            <tr>
-                                <th>Department Name</th>
-                                <th>Admin</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.props.departments && this.props.departments.map((dep, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{dep.Department_Name}</td>
-                                            <td>{dep.Department_Admin_Id}</td>
-                                            <td>
-                                                <Button variant="success">Edit</Button>{' '}
-                                                <Button variant="danger">Delete</Button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-
-                            }
-
-                        </tbody>
-                    </Table>
+                    <Button variant="primary" onClick={() => setIsAdding(true)}>Add Department</Button>{' '}
                 </div>
-            </div>
+                <div style={{
+                padding: 30
+            }}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>Department Name</th>
+                            <th>Admin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {departments?.map((dep, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{dep.Department_Name}</td>
+                                        <td>{`${dep.Department_Admin_Id} - ${dep?.First_Name} ${dep?.Last_Name} `}</td>
+                                        <td>
+                                            <Button variant="success" onClick={() => editButtonOnClick(dep)}>Edit</Button>{' '}
+                                            <Button variant="danger" onClick={() => deleteButtonOnClick(dep)}>Delete</Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
 
-        );
-    }
+                        }
+
+                    </tbody>
+                </Table>
+            </div>
+                {isAdding && <AddDepartmentModal
+                    show={isAdding}
+                    handleClose={() => setIsAdding(false)}
+                />}
+                {isDeleting && <DeleteModal
+                    show={isDeleting}
+                    handleClose={handleCloseDeleteModal}
+                    handleDelete={handleDeleteDepartment}
+                    title='Confirm Delete Department'
+                    body={`Do you want to Remove ${selectedDepartment?.Department_Name} department?`}
+                />}
+                {isUpdating && <UpdateModal
+                    show={isUpdating}
+                    handleClose={handleCloseUpdatModal}
+                    selectedDepartment={selectedDepartment} />}
+        </div>
+        </>
+    );
+
 }
 
 function mapState(state) {

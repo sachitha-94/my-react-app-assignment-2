@@ -85,7 +85,7 @@ const RegisterPage = (props) => {
                                 
 
                         {
-                                RoleTypeCodes.filter(x => x.id == 3 || x.id == 4).map((option, index) =>  {
+                                RoleTypeCodes?.map((option, index) => {
 
                                 return(
                                     
