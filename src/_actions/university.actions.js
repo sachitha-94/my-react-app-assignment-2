@@ -1,7 +1,7 @@
 import { universityConstants } from '../_constants';
 import { departmentService } from '../_services';
-import { alertActions } from './';
-import { loaderActions } from './';
+import { alertActions } from '.';
+import { loaderActions } from '.';
 
 export const departmentActions = {
     addDepartment,
