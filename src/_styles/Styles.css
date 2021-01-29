@@ -4,7 +4,7 @@
     align-content: center;
     height: 100%;
     background-repeat: no-repeat;
-    background-image: url("../_images/login_page.jpg");
+    background-image: url("../_images/login_page.png");
     background-repeat: no-repeat;
     position: relative;
     background-size: 100% 100%;
@@ -33,7 +33,7 @@ body,
     height: 100%;
     width: 100%;
     background-repeat: no-repeat;
-    background-image: url("../_images/login_page.jpg");
+    background-image: url("../_images/login_page.png");
 }
 
 .container-fluid {

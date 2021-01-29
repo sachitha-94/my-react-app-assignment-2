@@ -1,73 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { courseActions, studentActions } from '../_actions';
 import { Table, Button } from 'react-bootstrap';
 
-class Enroll extends React.Component {
-    constructor(props) {
-        super(props);
+const Enroll = (props) => {
 
-        this.state = {};
+    const { getAllCourses, enrollmentRequest, user, courses } = props;
 
-        this.handleChange = this.enrollRequest.bind(this);
-    }
+    const [submitted, setSubmitted] = useState(false);
 
-    componentDidMount() {
-        this.props.getAllCourses();
-    }
+    useEffect(() => {
+        getAllCourses()
+    }, [])
 
 
-    enrollRequest(e, course, studentId) {
+    const enrollRequest = (e, course, studentId) => {
         e.preventDefault();
-        this.setState({ submitted: true });
+        setSubmitted(true);
         var enrollRequest = {
             Request_Type_Id: 1,
             Status_Type_Code_Id: 3,
             User_Id: studentId,
             Course_Id: course.Course_Id,
         }
-        this.props.enrollmentRequest(enrollRequest);
+        enrollmentRequest(enrollRequest);
     }
 
-    render() {
-        const { user } = this.props;
-        return (
-            <div className="row child-component-container">
-                <h3 className="child-component-header">Enroll</h3>
-                <div className="row" style={{
-                    padding: 30
-                }}>
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <th>Pre Requesites</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.props.courses && this.props.courses.map((course, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{course.Course_Name}</td>
-                                            <td>{course.Pre_Course_Req}</td>
-                                            <td>
-                                                <Button onClick={(e) => this.enrollRequest(e, course, user[0].User_Id)} variant="success">Enroll</Button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
+    return (
+        <div className="row child-component-container">
+            <h3 className="child-component-header">Enroll</h3>
+            <div className="row" style={{
+                padding: 30
+            }}>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Pre Requesites</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {courses?.map((course, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{course.Course_Name}</td>
+                                        <td>{course.Pre_Course_Req}</td>
+                                        <td>
+                                            <Button onClick={(e) => enrollRequest(e, course, user[0].User_Id)} variant="success">Enroll</Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
 
-                            }
+                        }
 
-                        </tbody>
-                    </Table>
-                </div>
+                    </tbody>
+                </Table>
             </div>
+        </div>
 
-        );
-    }
+    );
+
 }
 
 function mapState(state) {

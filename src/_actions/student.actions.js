@@ -62,7 +62,7 @@ function enrollmentStatus(studentId) {
 function courseStatus(studentId) {
     return dispatch => {
         dispatch(loaderActions.LoadingStart());
-        studentService.courseStatus()
+        studentService.courseStatus(studentId)
             .then(
                 courseStatus => {
                     dispatch(loaderActions.LoadingEnd());

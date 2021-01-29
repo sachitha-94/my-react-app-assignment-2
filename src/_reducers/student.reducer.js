@@ -28,7 +28,7 @@ export function studentReducer(state = {...intialState }, action) {
         case studentConstants.ENROLLMENT_REQUEST_STATUS_SUCCESS:
             return {
                 ...state,
-                enrollmentRequestStatus: action.enrollmentRequestStatus,
+                enrollmentRequestStatus: action.enrollmentStatus,
             };
         case studentConstants.ENROLLMENT_REQUEST_STATUS_FAILURE:
             return {

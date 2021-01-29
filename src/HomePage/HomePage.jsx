@@ -32,7 +32,7 @@ const HomePage = (props) => {
                     <Row className="home-page-body flex-body">
                         <Col xs={3} id="sidebar-wrapper">
                             <Row className="side-bar">
-                                <Sidebar user={user} />
+                                <Sidebar user={user} history={history} />
                             </Row>
                         </Col>
                         <Col xs={9} id="page-content-wrapper">

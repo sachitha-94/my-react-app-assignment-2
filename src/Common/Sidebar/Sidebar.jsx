@@ -1,6 +1,5 @@
-import React from "react";
-import { Nav, ListGroup } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { ListGroup } from "react-bootstrap";
 import { withRouter } from "react-router";
 import { Bookmark } from 'react-bootstrap-icons';
 
@@ -9,23 +8,15 @@ const menuItems = [
         id: 1,
         name: 'Departments',
         path: '/university/departments',
-        role: 1,
+        accessUserRoles: [1],
         component: Bookmark,
 
     },
-    // {
-    //     id: 2,
-    //     name: 'Add Departments',
-    //     path: '/university/add_department',
-    //     role: 1,
-    //     component: Bookmark,
-
-    // },
     {
         id: 3,
         name: 'Courses',
         path: '/Department/Courses',
-        role: 2,
+        accessUserRoles: [1, 2],
         component: Bookmark,
 
     },
@@ -33,30 +24,15 @@ const menuItems = [
         id: 4,
         name: "Modules",
         path: '/Department/Modules',
-        role: 2,
+        accessUserRoles: [1, 2],
         component: Bookmark,
 
     },
-    // {
-    //     id: 3,
-    //     name: 'Add Course',
-    //     path: '/Department/Add_Course',
-    //     role: 2
-
-    // },
-    // {
-    //     id: 4,
-    //     name: "Add Module",
-    //     path: '/Department/Add_Module',
-    //     role: 2,
-    //     component: Bookmark,
-
-    // },
     {
         id: 5,
         name: "Enroll",
         path: '/Student/Enroll',
-        role: 3,
+        accessUserRoles: [1, 3],
         component: Bookmark,
 
     },
@@ -64,7 +40,7 @@ const menuItems = [
         id: 6,
         name: 'Enrollment Request Status',
         path: '/Student/Enrollment_Request_Status',
-        role: 3,
+        accessUserRoles: [1, 3],
         component: Bookmark,
 
     },
@@ -72,91 +48,60 @@ const menuItems = [
         id: 7,
         name: "Course Status",
         path: '/Student/Course_Status',
-        role: 3,
+        accessUserRoles: [1, 3],
         component: Bookmark,
 
     },
 ];
 
+const Side = (props) => {
+    const { history, user } = props;
 
+    const [selectedMenu, setSelectedMenu] = useState(null);
 
-//<ListGroup.Item variant="primary">Primary</ListGroup.Item>
-//<ListGroup.Item variant="secondary">Secondary</ListGroup.Item>
-//<ListGroup.Item variant="success">Success</ListGroup.Item>
-//<ListGroup.Item variant="danger">Danger</ListGroup.Item>
-//<ListGroup.Item variant="warning">Warning</ListGroup.Item>
-//<ListGroup.Item variant="info">Info</ListGroup.Item>
-//<ListGroup.Item variant="light">Light</ListGroup.Item>
-//<ListGroup.Item variant="dark">Dark</ListGroup.Item>
+    useState(() => {
+        const activeMenuItem = menuItems.filter(i => i.path === history?.location?.pathname);
+        if (activeMenuItem?.length > 0) setSelectedMenu(activeMenuItem[0])
+        else setSelectedMenu(menuItems?.[0]);
+    }, [history?.location?.pathname])
 
-class Side extends React.Component {
+    const menuItemOnClick = (item) => {
+        setSelectedMenu(item);
+        history.push(item.path);
+   }
 
-    constructor(props) {
-        super(props);
+    const isUserHaspermission = (accessUserRoles) => {
+        const isPermissionExist = accessUserRoles?.includes(user[0].Role_Type_Code_Id);
+        return isPermissionExist;
+   }
 
+    return (
 
-        this.state = {
-            activeMenu: '',
-        };
+        <ListGroup className="menu-items">
+            {
+                menuItems?.map((menu, index) => {
+                    const isShowMenuItem = isUserHaspermission(menu?.accessUserRoles);
+                    console.log(isShowMenuItem);
+                     return (
 
+                         isShowMenuItem &&
+                         (<ListGroup.Item
+                             className="menu-item-custom"
+                             key={index} action
+                             variant={menu?.id === selectedMenu?.id && 'primary'}
+                             onClick={() => menuItemOnClick(menu)}>
+                             {menu.name}
+                         </ListGroup.Item>)
+                    )
+                })
+            }
+        </ListGroup>
 
-    }
-
-    componentDidMount() {
-        //this.props.getUsers();
-    }
-
-    handleDeleteUser(id) {
-        return (e) => this.props.deleteUser(id);
-    }
-    getVariant(index) {
-        if (index === 0) {
-            return 'primary';
-        }
-        if (index === 1) {
-            return 'secondary';
-        }
-        if (index === 2) {
-            return 'success';
-        }
-        if (index === 3) {
-            return 'danger';
-        }
-        if (index === 4) {
-            return 'warning';
-        }
-        if (index === 5) {
-            return 'info';
-        }
-    }
-
-    render() {
-        const { user } = this.props;
-        const user_role = user[0].Role_Type_Code_Id;
-        return (
-            <>
-                <ListGroup className="menu-items">
-                    {
-                        menuItems?.map((menu, index) => {
-                            return (
-
-                                <ListGroup.Item className="menu-item-custom" key={index} variant={this.getVariant(index)} action>
-                                    <Link className="menu-item-content btn btn-link" to={menu.path}>
-                                        {menu.name}
-                                    </Link>
-                                </ListGroup.Item>
-                            )
-                        })
-                    }
-                </ListGroup>
-
-            </>
         );
-    }
 }
 
 
 
 const Sidebar = withRouter(Side);
 
-export { Sidebar as Sidebar };   
+export { Sidebar };   
