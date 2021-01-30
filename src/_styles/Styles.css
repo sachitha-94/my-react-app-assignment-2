@@ -1,13 +1,13 @@
 .login-container {
     display: flex;
-    justify-content: center;
-    align-content: center;
+    justify-content: flex-end;
+    /* align-content: center; */
     height: 100%;
-    background-repeat: no-repeat;
-    background-image: url("../_images/login_page.png");
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
+    /* background-image: url("../_images/login_page.png"); */
+    /* background-repeat: no-repeat; */
     position: relative;
-    background-size: 100% 100%;
+    /* background-size: 100% 100%; */
 }
 
 html,
@@ -29,9 +29,8 @@ body,
 }
 
 .login-img {
-    position: absolute;
+    position: inherit;
     height: 100%;
-    width: 100%;
     background-repeat: no-repeat;
     background-image: url("../_images/login_page.png");
 }

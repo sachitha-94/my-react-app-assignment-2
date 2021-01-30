@@ -37,7 +37,10 @@ const LoginPage = (props) => {
 
     return (
         <div className="row login-container">
-        <div className="col-md-6 login-box">
+            <div className="col-md-6 login-img">
+
+            </div>
+            <div className="col-md-6 login-box">
             <h2>Login</h2>
                 <form name="form" onSubmit={handleSubmit}>
                 <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>

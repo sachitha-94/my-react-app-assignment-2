@@ -30,9 +30,9 @@ const menuItems = [
     },
     {
         id: 5,
-        name: "Enroll",
+        name: "Enroll Modules",
         path: '/Student/Enroll',
-        accessUserRoles: [1, 3],
+        accessUserRoles: [3],
         component: Bookmark,
 
     },
@@ -40,7 +40,7 @@ const menuItems = [
         id: 6,
         name: 'Enrollment Request Status',
         path: '/Student/Enrollment_Request_Status',
-        accessUserRoles: [1, 3],
+        accessUserRoles: [3],
         component: Bookmark,
 
     },
@@ -48,7 +48,7 @@ const menuItems = [
         id: 7,
         name: "Course Status",
         path: '/Student/Course_Status',
-        accessUserRoles: [1, 3],
+        accessUserRoles: [3],
         component: Bookmark,
 
     },

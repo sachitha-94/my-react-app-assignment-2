@@ -44,6 +44,9 @@ const RegisterPage = (props) => {
 
     return (
         <div className="row login-container">
+            <div className="col-md-6 login-img">
+
+            </div>
             <div className="col-md-6 login-box">
             <h2>Register</h2>
                 <form name="form" onSubmit={handleSubmit}>
