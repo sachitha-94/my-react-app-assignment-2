@@ -20,12 +20,14 @@ function login(username, password, user_role_id) {
                 user => {
                     dispatch(loaderActions.LoadingEnd());
                     dispatch(success(user));
-                    if (user[0].Role_Type_Code_Id == 1) {
+                    if (user[0].Role_Type_Code_Id === 1) {
                         history.push('/university/departments');
-                    } else if (user[0].Role_Type_Code_Id == 2) {
+                    } else if (user[0].Role_Type_Code_Id === 2) {
                         history.push('/Department/Courses');
-                    } else if (user[0].Role_Type_Code_Id == 3) {
+                    } else if (user[0].Role_Type_Code_Id === 3) {
                         history.push('/Student/Enroll');
+                    } else if (user[0].Role_Type_Code_Id === 4) {
+                        history.push('/Tutor/Exam');
                     }
 
 

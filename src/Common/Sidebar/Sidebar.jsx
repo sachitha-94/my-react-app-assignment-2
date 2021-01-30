@@ -30,7 +30,7 @@ const menuItems = [
     },
     {
         id: 5,
-        name: "Enroll Modules",
+        name: "Enroll Course",
         path: '/Student/Enroll',
         accessUserRoles: [3],
         component: Bookmark,
@@ -49,6 +49,14 @@ const menuItems = [
         name: "Course Status",
         path: '/Student/Course_Status',
         accessUserRoles: [3],
+        component: Bookmark,
+
+    },
+    {
+        id: 8,
+        name: "Exams",
+        path: '/Tutor/Exam',
+        accessUserRoles: [1, 3, 4],
         component: Bookmark,
 
     },

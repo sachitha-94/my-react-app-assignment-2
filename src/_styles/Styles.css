@@ -21,18 +21,18 @@ body,
 }
 
 .login-box {
-    background: rgba(36, 37, 42, 0.5);
-    color: white;
+    background: rgba(51, 69, 158, 0.5);
+    color: rgb(255, 255, 255);
     font-weight: 700;
     padding: 50px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 
 .login-img {
     position: inherit;
     height: 100%;
     background-repeat: no-repeat;
-    background-image: url("../_images/login_page.png");
+    background-image: url("../_images/login_page1.jpg");
 }
 
 .container-fluid {
@@ -80,6 +80,11 @@ body,
     margin-left: 20px;
 }
 
+.top-bar .system-name {
+    margin-left: 20px;
+}
+
+
 .home-page-body {}
 
 .flex-parent {
@@ -89,7 +94,7 @@ body,
 
 .flex-header {
     flex: 0 0 50px;
-    border-bottom: 3px solid palevioletred;
+    border-bottom: 3px solid rgb(41, 25, 184);
 }
 
 .flex-body {
@@ -106,7 +111,7 @@ body,
 
 .child-component-container {
     margin: 10px;
-    border: 1px solid palevioletred;
+    border: 1px solid rgb(45, 29, 192);
     border-radius: 5px;
     background: ghostwhite;
     max-height: 100%;
@@ -116,7 +121,7 @@ body,
 }
 
 .child-component-header {
-    background: palevioletred;
+    background: rgb(32, 18, 233);
     padding: 10px;
     color: ghostwhite;
 }

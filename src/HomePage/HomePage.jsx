@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { LoginPage } from '../LoginPage';
 import { Sidebar } from '../Common/Sidebar/Sidebar';
-import { AddDepartment, Departments } from '../University';
-import { AddCourse, Courses, AddModule, Modules } from '../Department';
+import { Departments } from '../University';
+import { Exams } from '../Exam';
+import { Courses, AddModule, Modules } from '../Department';
 import { Enroll, StudentEnrollmentStatus, CourseStatusPage } from '../Student';
 import { userActions } from '../_actions';
-import { Container, Row, Col, Card, Form, Button, Navbar } from "react-bootstrap";
-import { withRouter } from "react-router";
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import { PrivateRoute } from '../_components';
+import { Container, Row, Col, Navbar } from "react-bootstrap";
+import { Route, Switch } from 'react-router-dom';
 import { history } from '../_helpers';
 
 const HomePage = (props) => {
@@ -23,6 +22,9 @@ const HomePage = (props) => {
                 <Col className="flex-parent">
                     <Row className=" flex-header">
                         <Navbar className="top-bar" expand="lg" variant="light" bg="light">
+                            {/* <b className="system-name">
+                                Course Management System
+                            </b> */}
                             <span className="logged-user">Hi {user[0].First_Name} {user[0].Last_Name}!</span>
                             <span className=" log-out">
                                 <Link to="/login">Logout</Link>
@@ -63,6 +65,9 @@ const HomePage = (props) => {
                                 </Route>
                                 <Route exact path="/Student/Course_Status">
                                     <CourseStatusPage user={user} />
+                                </Route>
+                                <Route exact path="/Tutor/Exam">
+                                    <Exams />
                                 </Route>
                             </Switch>
                         </Col>

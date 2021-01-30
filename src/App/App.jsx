@@ -24,11 +24,6 @@ const App = (props) => {
         <div>
 
             <Router history={history}>
-                {alert.message &&
-                    <Alert className="alert-box" variant={alert.type == "alert-danger" ? 'danger' : 'success'} dismissible onClose={() => clearAlerts()}>
-                        <Alert.Heading>{alert.type == "alert-danger" ? 'Error' : 'Success'}!  {alert.message}</Alert.Heading>
-                    </Alert>
-                }
                 {loader.loading && loader.count != 0 &&
                     <div className="custom-loader">
                         <Spinner animation="grow" variant="primary" />
@@ -45,11 +40,17 @@ const App = (props) => {
                     <PrivateRoute path="/university" component={HomePage} />
                     <PrivateRoute path="/Department" component={HomePage} />
                     <PrivateRoute path="/Student" component={HomePage} />
+                    <PrivateRoute path="/Tutor" component={HomePage} />
                     <Route path="/login" component={LoginPage} />
                     <Route path="/register" component={RegisterPage} />
                     <Redirect from="*" to="/login" />
                 </Switch>
             </Router>
+            {alert.message &&
+                <Alert className="alert-box" variant={alert.type == "alert-danger" ? 'danger' : 'success'} dismissible onClose={() => clearAlerts()}>
+                    <Alert.Heading>{alert.type == "alert-danger" ? 'Error' : 'Success'}!  {alert.message}</Alert.Heading>
+                </Alert>
+            }
         </div>
     );
 }

@@ -5,3 +5,4 @@ export * from './university.constants';
 export * from './loader.constants';
 export * from './course.constants';
 export * from './student.constants';
+export * from './exam.constants';

@@ -8,6 +8,7 @@ import { departmentsReducer } from './university.reducer';
 import { coursesReducer } from './course.reducer';
 import { loaderReducer } from './loader.reducer';
 import { studentReducer } from './student.reducer';
+import { examReducer } from './exam.reducer';
 
 const rootReducer = combineReducers({
     authentication,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     departmentsReducer,
     loaderReducer,
     coursesReducer,
-    studentReducer
+    studentReducer,
+    examReducer
 });
 
 export default rootReducer;

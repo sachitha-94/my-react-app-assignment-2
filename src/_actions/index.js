@@ -4,3 +4,4 @@ export * from './university.actions';
 export * from './course.actions';
 export * from './loader.actions';
 export * from './student.actions';
+export * from './exam.actions';
