@@ -67,7 +67,7 @@ const AddModule = (props) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Department</Modal.Title>
+                <Modal.Title>Add Module</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form name="form" onSubmit={handleSubmit}>
