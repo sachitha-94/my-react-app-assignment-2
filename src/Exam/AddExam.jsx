@@ -63,7 +63,7 @@ const AddExam = (props) => {
 
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Department</Modal.Title>
+                <Modal.Title>Add Exam</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form name="form" onSubmit={handleSubmit}>

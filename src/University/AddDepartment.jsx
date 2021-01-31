@@ -53,7 +53,7 @@ const AddDepartment = (props) => {
 
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Department</Modal.Title>
+                <Modal.Title>Add Department</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form name="form" onSubmit={handleSubmit}>
