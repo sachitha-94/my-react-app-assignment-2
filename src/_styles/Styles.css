@@ -29,10 +29,11 @@ body,
 }
 
 .login-img {
+     margin-top: 150px;
     position: inherit;
     height: 100%;
     background-repeat: no-repeat;
-    background-image: url("../_images/login_page1.jpg");
+    background-image: url("../_images/login_page4.jpg");
 }
 
 .container-fluid {
